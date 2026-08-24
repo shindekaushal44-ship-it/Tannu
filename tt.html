@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sorry Madam!</title>
+    <!-- Elegant Romantic Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;1,500;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Overall Page Styling with Romantic Background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Glass Card Styling (Used for the pages) */
+        .page {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(25px, 5vw, 40px) clamp(20px, 4vw, 30px);
+            width: 85%;
+            max-width: 380px;
+            
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 15px 35px rgba(238, 156, 167, 0.3);
+            text-align: center;
+            
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ENVELOPE ANIMATION STYLES */
+        .envelope-wrapper {
+            position: relative;
+            width: 260px;
+            height: 180px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* The back of the envelope */
+        .envelope-back {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #f7b2b7;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* The letter inside the envelope */
+        .letter-inside {
+            position: absolute;
+            top: 10px; left: 10px;
+            width: 240px; height: 160px;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.8s ease 0.4s; /* Waits for flap to open */
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            color: #d63050;
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        /* The flap of the envelope */
+        .flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-top: 100px solid #e2959a;
+            transform-origin: top;
+            transition: transform 0.6s ease, z-index 0.2s;
+            z-index: 4;
+        }
+
+        /* The front pockets of the envelope */
+        .envelope-front {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 0;
+            border-left: 130px solid #ffcad4;
+            border-right: 130px solid #ffcad4;
+            border-bottom: 90px solid #f4acb7;
+            border-top: 90px solid transparent;
+            border-radius: 0 0 8px 8px;
+            z-index: 3;
+        }
+
+        /* Envelope Open State applied via JavaScript */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        
+        .envelope-wrapper.open .letter-inside {
+            transform: translateY(-100px); /* Slides the letter up */
+        }
+
+        .tap-text {
+            margin-top: 30px;
+            color: #d63050;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #d63050;
+            font-size: clamp(26px, 8vw, 34px); 
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            line-height: 1.2;
+            font-style: italic;
+        }
+
+        .letter-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(16px, 4.5vw, 19px);
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        /* Responsive Image Styling */
+        img {
+            width: 100%;
+            max-width: clamp(180px, 50vw, 240px);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            object-fit: cover;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Buttons */
+        button {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: clamp(15px, 4vw, 17px);
+            padding: 12px 30px;
+            background: #ffffff; 
+            color: #d63050;
+            border: 1px solid rgba(214, 48, 80, 0.2);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(214, 48, 80, 0.1);
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-next {
+            width: 100%;
+            max-width: 220px;
+            background: #d63050;
+            color: #ffffff;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(214, 48, 80, 0.2);
+        }
+        
+        .btn-next:hover {
+            background: #be2643;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Moving Button */
+        #moving-no {
+            position: relative;
+            transition: left 0.25s ease-out, top 0.25s ease-out;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 0: ANIMATED ENVELOPE -->
+    <div id="page-envelope" class="page active" style="background: transparent; border: none; box-shadow: none; backdrop-filter: none;">
+        <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope-back"></div>
+            <div class="letter-inside">💌 For You</div>
+            <div class="flap"></div>
+            <div class="envelope-front"></div>
+        </div>
+        <div class="tap-text" id="tapText">Tap to open</div>
+    </div>
+
+    <!-- PAGE 0.5: THE LETTER MESSAGE -->
+    <div id="page-letter" class="page">
+        <h1>I am so sorry...</h1>
+        <p class="letter-text">
+            Heyyyyy Taannnuuuu 🫠 Im not ignoring u bala me ka kru tula igonre 🙂 me krnar hoto tula call pn Teva mala achaank Vomiting sarkha zal mhanun me Bathroom mdhe gelo mg ani tula mahitiye me uthlo ki tula pahile msg nay tar call krto pn aaj te chaakar aali mhanun .. ani tu Yevdhya divas navti tar me Literally tuza photo bagat hoto athvan yet hoti 🥺 tu khupp ani tyat tu pn ajari ani me pn jam ani  ka igonre kru tula bala me tu  yevdhi cute aahes tar 🥰  kasa kay kru ❤️ 
+Maaf Kara Madam plzzz 🙏🙏 <br><br>
+            Please give me a chance to make it right. ❤️
+        </p>
+        <button class="btn-next" onclick="window.location.href='thisisforu.html'">Next</button>
+    </div>
+
+    <!-- PAGE 1: BALA AAIK NA -->
+    <div id="page1" class="page">
+        <h1>Bala Aaik Na...</h1>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZtZ2F0dDBhZmJ6ZXp1cXc0OHBoM28xYmczMXJ4MTgzcXRqNGp2ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKoWXm3okO1kgHC/giphy.gif" alt="Cute please image">
+        
+        <div class="button-container">
+            <button onclick="showPage('page-thankyou')">Yes</button>
+            <button onclick="showPage('page2')">No</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: EKDATARI + MOVING NO BUTTON -->
+    <div id="page2" class="page">
+        <h1>Please Aaik Na Ekdatari</h1>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDFnZnI4bzhndTVpM2QxZHRmYXp0YmF4cWt6Zm1ndmhybnpmaDAxOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OPU6wzx8JrHna/giphy.gif" alt="Crying cute image">
+        
+        <div class="button-container">
+            <button onclick="showPage('page-thankyou')">Yes</button>
+            <button id="moving-no" onmouseover="moveButton(event)" ontouchstart="moveButton(event)">No</button>
+        </div>
+    </div>
+
+    <!-- THANK YOU PAGE -->
+    <div id="page-thankyou" class="page">
+        <h1>Thank you Madam ❤️</h1>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWEweTV5NjBvZDFxaXR4NWY2ZDNtaGVzbnExOWJ5bnEweWFwNHN3YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26BRv0ThflsHCqDrG/giphy.gif" alt="Happy impress image">
+        
+        <button class="btn-next" onclick="alert('Love you always! ❤️')">Next</button>
+    </div>
+
+    <script>
+        // Envelope Animation Logic
+        function openEnvelope() {
+            const envelope = document.querySelector('.envelope-wrapper');
+            const tapText = document.getElementById('tapText');
+            
+            // Add the open class to trigger CSS animation
+            envelope.classList.add('open');
+            tapText.style.display = 'none'; // Hide "Tap to open"
+            
+            // Wait 1.5 seconds for the letter to slide up, then fade to the readable letter page
+            setTimeout(() => {
+                showPage('page-letter');
+            }, 1600);
+        }
+
+        // Page Navigation Logic
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(function(page) {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Moving Button Logic
+        function moveButton(event) {
+            // Stop touch from registering as a click on mobile
+            if(event) { event.preventDefault(); }
+            
+            const button = document.getElementById('moving-no');
+            const btnWidth = button.offsetWidth;
+            const btnHeight = button.offsetHeight;
+            
+            const maxX = window.innerWidth - btnWidth - 20; 
+            const maxY = window.innerHeight - btnHeight - 20;
+            
+            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+            
+            button.style.position = 'fixed';
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+        }
+    </script>
+</body>
+</html>

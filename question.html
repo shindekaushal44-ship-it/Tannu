@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sorry Madam!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Playfair+Display:ital,wght@0,600;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Overall Page Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Glass Card Styling */
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(25px, 5vw, 40px) clamp(20px, 4vw, 30px);
+            width: 85%;
+            max-width: 380px;
+            
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 15px 35px rgba(238, 156, 167, 0.3);
+            text-align: center;
+            
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Romantic Typography */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #d63050; 
+            font-size: clamp(24px, 7vw, 32px); 
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            line-height: 1.3;
+            font-style: italic;
+        }
+
+        /* Responsive Image Styling */
+        img {
+            width: 100%;
+            max-width: clamp(180px, 50vw, 240px);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            object-fit: cover;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Clean, Minimal Buttons */
+        button {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: clamp(15px, 4vw, 17px);
+            padding: 12px 30px;
+            background: #ffffff; 
+            color: #d63050; 
+            border: 1px solid rgba(214, 48, 80, 0.2);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(214, 48, 80, 0.1);
+            
+            /* Mobile touch safety */
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(214, 48, 80, 0.2);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Moving "ho" Button */
+        #moving-ho {
+            position: relative;
+            transition: left 0.25s ease-out, top 0.25s ease-out;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <h1>Aajun pn ragavlis aahe ka bala ?</h1>
+        
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDFnZnI4bzhndTVpM2QxZHRmYXp0YmF4cWt6Zm1ndmhybnpmaDAxOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OPU6wzx8JrHna/giphy.gif" alt="Crying cute image">
+        
+        <div class="button-container">
+            <button id="moving-ho" onmouseover="moveButton(event)" ontouchstart="moveButton(event)">ho</button>
+            
+            <button onclick="window.location.href='thank.html'">Naay</button>
+        </div>
+    </div>
+
+    <script>
+        function moveButton(event) {
+            // Stop touch from registering as a click on mobile
+            if(event) { event.preventDefault(); }
+            
+            const button = document.getElementById('moving-ho');
+            
+            // Get the button's exact dimensions
+            const btnWidth = button.offsetWidth;
+            const btnHeight = button.offsetHeight;
+            
+            // Get screen sizes, keeping a safe margin so it doesn't go off-screen
+            const maxX = window.innerWidth - btnWidth - 20; 
+            const maxY = window.innerHeight - btnHeight - 20;
+            
+            // Calculate random positions within the safe boundaries
+            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+            
+            // Apply the new random position to make it "run away"
+            button.style.position = 'fixed';
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+        }
+    </script>
+</body>
+</html>
